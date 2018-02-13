@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="stateManager.js"></script>
+	<script type="text/babel">
+		
+
+		function calculatorReducer(currentState =[],action)
+		{
+			if(action.type === 'ADD'){
+				let newState = {
+
+					txtNumber1 : currentState.txtNumber1,
+					txtNumber2 : currentState.txtNumber2,
+					result : txtNumber1+txtNumber2,
+				};
+				return newState;
+			}
+
+			if(action.type === 'SUBTRACT')
+			{
+				let newState = {
+
+					txtNumber1 : currentState.txtNumber1,
+					txtNumber2 : currentState.txtNumber2,
+					result : txtNumber1-txtNumber2,
+				};
+				return newState;
+			}
+
+			if(action.type === 'MULTIPLY')
+			{
+				let newState = {
+
+					txtNumber1 : currentState.txtNumber1,
+					txtNumber2 : currentState.txtNumber2,
+					result : txtNumber1*txtNumber2,
+				};
+				return newState;
+			}
+
+			if(action.type === 'DIVIDE')
+			{
+				let newState = {
+
+					txtNumber1 : currentState.txtNumber1,
+					txtNumber2 : currentState.txtNumber2,
+					result : txtNumber1/txtNumber2,
+				};
+				return newState;
+			}
+
+			if(action.type === 'UPDATENUMBER1')
+			{
+				let newCalcState = {
+
+					txtNumber1 : acttion.payload.val1,
+					txtNumber2 : currentState.txtNumber2,
+					result : currentState.result,
+				};
+
+				return newCalcState;
+			}
+
+			if(action.type === 'UPDATENUMBER2')
+			{
+				let newCalcState = {
+					txtNumber2 : acttion.payload.val2,
+					txtNumber1 : currentState.txtNumber1,
+					result : currentState.result,
+				};
+				return newCalcState;
+			}
+
+			return currentState;
+		}
+
+		function getcalculatorActionCreator()
+		{
+			return {
+				add(data){
+					return {type :'ADD', payload : data}
+				},
+				multiply(data){
+					return {type :'MULTIPLY' , data}
+				},
+				subtract(data)
+				{
+					return {type :'SUBTRACT',data}
+				},
+
+				divide(data)
+				{
+					return {type :'DIVIDE', data}
+				},
+
+				updateNumber1(data)
+				{
+					return {type : 'UPDATENUMBER1',payload : val1}
+				},
+
+				updateNumber2(data)
+				{
+					return {type : 'UPDATENUMBER2', payload:val2}
+				}
+			}
+		}
+
+		//let 
+		window.store = SM.createStore(calculatorReducer);
+		let actions = SM.bindActionCreators(getcalculatorActionCreator(),store.dispatch());
+		
+
+		class Calculator extends React.Component{
+			
+
+			render(){
+
+				return (
+					<div>
+						<h1>Calculator</h1>
+						<hr/>
+						<input type="number" ref="txtNumber1" onChange={() => console.log("onChange")}/>
+						<input type="number" ref="txtNumber2" onChange={() => console.log("onChange")}/>
+						<input type="button" value="Add" onClick={() => console.log("onChange")} />
+						<input type="button" value="Subtract" onClick={console.log("onChange")} />
+						<input type="button" value="Multiply" onClick={console.log("onChange")} />
+						<input type="button" value="Divide" onClick={console.log("onChange")} />
+						<div>result</div>
+					</div>
+				);
+			}
+		}
+		
+
+		let calc = store.getState();
+
+		window.renderApp = function(){
+			ReactDOM.render(<Calculator />,
+					document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	
+	<div id="root"></div>
+</body>
+</html>

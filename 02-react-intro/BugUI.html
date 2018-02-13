@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bug Tracker</title>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		.stats, .bugname{
+			font-size: 18pt;
+		}
+		ol{
+			list-style : none;
+			width: 500px;
+			-webkit-padding-start : 0px;
+		}
+		li{
+			border : 1px solid gray;
+			background-color: #e7e7e7;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		.bugname{
+			cursor: pointer;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+
+
+		class BugComponent extends React.Component{
+			render(){
+				let bugs = this.props.model.bugData;
+				let bugItems = [];
+				for(let index=0; index<bugs.length; index++){
+					let bugItem = (<li>
+				<span className="bugname closed">[This is bug - {index+1}]</span>
+				<div className="datetime">[Created At {Date()}]</div>
+			</li>);
+					bugItems.push(bugItem);
+				}
+				return(
+					<ol>
+						{bugItems}
+					</ol>
+				)
+			}
+		}
+
+
+
+		class Bug
+		{
+			name:"This is a Bug";
+			id : 0;
+			CreatedAt : "Time It is Created";
+			Stats: false // 1 For Close and 0 for Open
+
+			constructor (name)
+			{
+				this.name = name;
+				this.Stats = false;
+			}
+
+			toggle()
+			{
+				
+			}
+
+		}
+
+		class BugManager
+		{
+			count : 0;
+
+			bugData = [];
+
+			 AddBug(nameVal) {
+					
+
+						this.count ++;
+
+						let bug = new Bug();
+						bug.name = nameVal;
+						bug.id = this.count;
+
+						this.bugData.push(bug);
+				}
+
+				RemoveBug(bug){
+					for(let index=0; index<this.bugData.length; index++){
+
+						if(bug === this.bugData[index])
+						{
+							this.bugData.splice(index,1);
+							this.count --;
+							break;
+						}
+
+					}
+				}
+		}
+
+		var bugManager = new BugManager();
+
+		bugManager.AddBug("Bug1");
+		bugManager.AddBug("Bug2");
+
+
+		ReactDOM.render(<BugComponent model={bugManager} />,
+			document.getElementById('root'));
+
+
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+
+	<div id="root"></div>
+	<hr>
+	<section class="stats">
+		<span class="closed">1</span>
+		<span> / </span>
+		<span>2</span>
+	</section>
+	<section class="sort">
+		<label for="">Order By :</label>
+		<select name="" id="">
+			<option value=""></option>
+			<option value=""></option>
+		</select>
+		<label for="">Descending ? :</label>
+		<input type="checkbox" name="" id="">
+	</section>
+	<section class="edit">
+		<label for="">Bug Name :</label>
+		<input type="text" name="" id="">
+		<input type="button" value="Create New">
+	</section>
+	<section class="list">
+		<ol>
+			<li>
+				<span class="bugname closed">[This is bug - 1]</span>
+				<div class="datetime">[Created At]</div>
+			</li>
+			<li>
+				<span class="bugname">[This is bug - 2]</span>
+				<div class="datetime">[Created At]</div>
+			</li>
+		</ol>
+		<input type="button" value="Remove Closed">
+	</section>
+</body>
+</html>

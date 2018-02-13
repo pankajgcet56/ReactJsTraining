@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="redux.js"></script>
+	<script src="react-redux.js"></script>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		.stats, .bugname{
+			font-size: 18pt;
+		}
+		ol{
+			list-style : none;
+			width: 500px;
+			-webkit-padding-start : 0px;
+		}
+		li{
+			border : 1px solid gray;
+			background-color: #e7e7e7;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		.bugname{
+			cursor: pointer;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script type="text/babel">
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr>
+	<table></table>
+	 <div class="tab">
+	  <button class="tablinks" onclick="openCity(event, 'London')">London</button>
+	  <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+	  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+	</div>
+
+	<div id="London" class="tabcontent">
+	  <h3>London</h3>
+	  <p>London is the capital city of England.</p>
+	</div>
+
+	<div id="Paris" class="tabcontent">
+	  <h3>Paris</h3>
+	  <p>Paris is the capital of France.</p>
+	</div>
+
+	<div id="Tokyo" class="tabcontent">
+	  <h3>Tokyo</h3>
+	  <p>Tokyo is the capital of Japan.</p>
+	</div> 
+	<div id="root"></div>
+</body>
+</html>

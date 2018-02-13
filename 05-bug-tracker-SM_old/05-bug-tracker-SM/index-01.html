@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="stateManager.js"></script>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		.stats, .bugname{
+			font-size: 18pt;
+		}
+		ol{
+			list-style : none;
+			width: 500px;
+			-webkit-padding-start : 0px;
+		}
+		li{
+			border : 1px solid gray;
+			background-color: #e7e7e7;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		.bugname{
+			cursor: pointer;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script type="text/babel">
+		
+		function bugsReducer(currentState = [], action){
+			if (action.type === 'ADD_NEW'){
+				let newBug = {
+					name : action.payload,
+					isClosed : false
+				};
+				currentState.push(newBug);
+				return currentState;
+			}
+			if (action.type === 'TOGGLE'){
+
+			}
+			if (action.type === 'REMOVE_CLOSED'){
+
+			}
+			return currentState;
+		}
+		
+
+		function getBugActionCreators(){
+			return {
+				addNew(bugName){
+					return { type : 'ADD_NEW', payload : bugName}
+				},
+				toggle(){
+
+				},
+				removeClosed(){
+
+				}
+			}
+		}
+
+		window.store = SM.createStore(bugsReducer);
+		let actions = SM.bindActionCreators(getBugActionCreators(), store.dispatch);
+		
+
+		class BugTracker extends React.Component{
+			constructor(){
+				super();
+				this.onCreateClick = this.onCreateClick.bind(this);
+			}
+			onCreateClick(){
+				let bugName = this.refs.txtBugName.value;
+				this.props.addNew(bugName);
+			}
+			
+			render(){
+				console.log('BugTracker render triggered')
+				let bugItems = this.props.bugs.map((bug, index) => (
+					<BugItem data={bug} key={index} />
+				));
+				let closedCount = this.props.bugs.reduce(
+					(prevResult, bug) => bug.isClosed ? ++prevResult : prevResult, 0);
+				return(
+					
+					<div>
+						<section className="stats">
+							<span className="closed">{closedCount}</span>
+							<span> / </span>
+							<span>{this.props.bugs.length}</span>
+						</section>
+						<section className="sort">
+							<label htmlFor="">Order By :</label>
+							<select name="" id="">
+								<option value=""></option>
+								<option value=""></option>
+							</select>
+							<label htmlFor="">Descending ? :</label>
+							<input type="checkbox" name="" id="" />
+						</section>
+						<section className="edit">
+							<label htmlFor="">Bug Name :</label>
+							<input type="text" ref="txtBugName"/>
+							<input type="button" value="Create New" onClick={this.onCreateClick}/>
+						</section>
+						<section className="list">
+							<ol>
+								{bugItems}
+							</ol>
+							<input type="button" value="Remove Closed" />
+						</section>
+					</div>
+				)
+			}
+		}
+
+		class BugItem extends React.Component{
+			state = {
+				data : null
+			};
+			constructor(){
+				super();
+				this.onBugClick = this.onBugClick.bind(this);
+			}
+			onBugClick(){
+				this.props.data.toggle();
+				this.setState({data : this.props.data});
+				console.log('a bug is clicked', this.props.data);
+			}
+			render(){
+				let bug = this.props.data;
+				let bugName = bug.isClosed ? 
+					(<span className="bugname closed" onClick={this.onBugClick}>{bug.name}</span>)
+					:
+					(<span className="bugname" onClick={this.onBugClick}>{bug.name}</span>)
+				return(
+					<li>
+						{bugName}
+						<div>[{bug.isClosed.toString()}]</div>
+						<div className="datetime">[Created At]</div>
+					</li>
+				)
+			}
+		}
+		
+		
+		
+		window.renderApp = function(){
+			let bugs = store.getState();
+			ReactDOM.render(
+				<BugTracker 
+					bugs={bugs}
+					{...actions}
+				/>,
+					document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr>
+	<div id="root"></div>
+</body>
+</html>

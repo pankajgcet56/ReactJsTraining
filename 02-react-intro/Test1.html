@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src = "babel.min.js"> </script>
+
+	<script type="text/babel">
+
+	class EventEmiter
+	{
+		_subscribers = [];
+
+		Subscribe(evt)
+		{
+			if(evt === 'function')
+				this._subscribers.push(evt);
+		}
+
+		TrigerChange()
+		{
+			this._subscribers.forEach(callback => callback());
+		}
+	}
+
+
+	class CalculatorModel extends EventEmiter
+	{
+		Number1 = 0;
+		Number2 = 0;
+
+		Result =0;
+
+		Add()
+		{
+			this.Result = this.Number1+this.Number2;
+			this.TrigerChange();
+		}
+
+		Subtract()
+		{
+			this.Result = this.Number1-this.Number2;
+			this.TrigerChange();
+		}
+
+		Multiply()
+		{
+			this.Result = this.Number1*this.Number2;
+			this.TrigerChange();
+		}
+
+		Divide()
+		{
+			this.Result = this.Number1/this.Number2;
+			this.TrigerChange();
+		}
+
+	}
+
+	class Calculator extends React.Component
+	{
+
+		render()
+		{
+			return (
+				<div>
+					<h1>Calculator</h1>
+					<hr/>
+					<input type="number" value="Number1" onChange = {(evt)=> console.log("Added Number1")} />
+					<input type="number" value="Number2" onChange = {(evt) => console.log("Number2")} />
+					<input type="button" value="Add" onChange = {(evt) => console.log("Add")}/>
+					<input type="button" value="Subtract" onChange = {(evt) => console.log("Subtract")}/>
+					<input type="button" value="Multiply" onChange = {(evt) => console.log("Multiply")}/>
+					<input type="button" value="Divide" onChange = {(evt) => console.log("Divide")}/>
+					<div>Result</div>
+				</div>
+			);
+		}
+	}
+
+
+var calcModel = new CalculatorModel();
+
+function RenderApp() {
+
+	ReactDOM.render(<Calculator model={calcModel}/>,document.getElementById('root'));
+}
+
+RenderApp();
+
+	</script>
+</head>
+<body>
+	<div id = "root"></div>
+</body>
+</html>

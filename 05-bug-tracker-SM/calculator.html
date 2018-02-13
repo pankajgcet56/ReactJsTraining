@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script src="stateManager.js"></script>
+	<style>
+		body{
+			margin-left: 50px;
+		}
+		section{
+			margin-bottom: 10px;
+		}
+		.closed{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+			font-weight: bold;
+		}
+		.stats, .bugname{
+			font-size: 18pt;
+		}
+		ol{
+			list-style : none;
+			width: 500px;
+			-webkit-padding-start : 0px;
+		}
+		li{
+			border : 1px solid gray;
+			background-color: #e7e7e7;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		.bugname{
+			cursor: pointer;
+		}
+		.datetime{
+			font-style: italic;
+		}
+	</style>
+	<script type="text/babel">
+		
+		function calculatorReducer(currentState = 0, action){
+			console.log(action);
+			if (action.type === 'ADD'){
+				return action.payload.n1 + action.payload.n2;
+			}
+			if (action.type === 'SUBTRACT'){
+				return action.payload.n1 - action.payload.n2;
+			}
+			if (action.type === 'MULTIPLY'){
+				return action.payload.n1 * action.payload.n2;
+			}
+			if (action.type === 'DIVIDE'){
+				return action.payload.n1 / action.payload.n2;
+			}
+			return currentState;
+		}
+		
+
+		function getCalculatorActionCreators(){
+			return {
+				add(n1, n2){
+					return { type : 'ADD', payload : {n1, n2}};
+				},
+				subtract(n1, n2){
+					return { type : 'SUBTRACT', payload : {n1, n2}};
+				},
+				multiply(n1, n2){
+					return { type : 'MULTIPLY', payload : {n1, n2}};
+				},
+				divide(n1, n2){
+					return { type : 'DIVIDE', payload : {n1, n2}};
+				},
+			}
+		}
+
+		window.store = SM.createStore(calculatorReducer);
+		let actions = SM.bindActionCreators(getCalculatorActionCreators(), store.dispatch);
+		
+		class Calculator extends React.Component{
+			state = {
+				n1 : 0,
+				n2 : 0
+			}
+			render(){
+				let {value, add, subtract, multiply, divide } = this.props;
+				let {n1, n2} = this.state;
+				return(
+					<div>
+					<input type="number" onChange={(evt) => this.setState({n1 : parseInt(evt.target.value)})} />
+					<input type="number" onChange={(evt) => this.setState({n2 : parseInt(evt.target.value)})} />
+					<input type="button" value="Add" onClick={() => add(n1, n2)} />
+					<input type="button" value="Subtract" onClick={() => subtract(n1, n2)} />
+					<input type="button" value="Multiply" onClick={() => multiply(n1, n2)} />
+					<input type="button" value="Divide" onClick={() => divide(n1, n2)} />
+					<div>{value}</div>
+					</div>
+				)
+			}
+		}
+		
+		
+		
+		
+		window.renderApp = function(){
+			let value = store.getState();
+			ReactDOM.render(
+				<Calculator 
+					value={value}
+					{...actions}
+				/>,
+					document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	<h1>Bug Tracker</h1>
+	<hr>
+	<div id="root"></div>
+</body>
+</html>

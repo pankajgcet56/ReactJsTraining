@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script>
+		class HelloWorld extends React.Component{
+			render(){
+				return React.createElement('div', null, 
+					React.createElement('h1', null, 'Welcome to Reactjs'),
+					React.createElement('hr', null, null),
+					React.createElement('h3', null, 'Introduction'),
+					React.createElement('div', null, 
+						React.createElement('p', null, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic laudantium necessitatibus tempora molestiae aut error porro harum adipisci ducimus veritatis, non, explicabo in reprehenderit. Officiis nostrum eum molestiae nihil vitae!'),
+						React.createElement('p', null, 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic laudantium necessitatibus tempora molestiae aut error porro harum adipisci ducimus veritatis, non, explicabo in reprehenderit. Officiis nostrum eum molestiae nihil vitae!')
+					),
+				);
+			}
+		}
+		function init(){
+			var btnRender = document.getElementById('btnRender');
+			btnRender.addEventListener('click', renderHelloWorld);
+			
+		}
+		function renderHelloWorld(){
+			console.log('rendering hello world!!');
+			ReactDOM.render(React.createElement(HelloWorld),
+				document.getElementById('root'));
+		}
+		window.addEventListener('DOMContentLoaded', init);
+	</script>
+</head>
+<body>
+	<input type="button" value="Render" id="btnRender">
+	<div id="root"></div>
+</body>
+</html>

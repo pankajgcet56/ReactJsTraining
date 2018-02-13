@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>State Manager - demo</title>
+	<script src="stateManager.js"></script>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	
+	<script type="text/babel">
+		
+
+		function spinnerReducer(currentState = 0, action){
+			if (action.type === 'INCREMENT')
+				return ++currentState;
+			if (action.type === 'DECREMENT')
+				return --currentState;
+			return currentState;
+		}
+
+		let store = SM.createStore(spinnerReducer);
+
+		{/*class Spinner extends React.Component{
+			
+			constructor(){
+				super();
+				this.onIncrementClick = this.onIncrementClick.bind(this);
+				this.onDecrementClick = this.onDecrementClick.bind(this);
+			}
+			onIncrementClick(){
+				this.props.increment();
+			}
+
+			onDecrementClick(){
+				this.props.decrement();
+			}
+			render(){
+				return(
+					<div>
+						<input type="button" value="DECREMENT" onClick={this.onDecrementClick}/>
+						<span> {this.props.currentValue} </span>
+						<input type="button" value="INCREMENT" onClick={this.onIncrementClick}/>
+					</div>
+				)
+			}
+		}*/}
+
+		{/*class Spinner extends React.Component{
+			render(){
+				return(
+					<div>
+						<input type="button" value="DECREMENT" onClick={() => this.props.decrement()}/>
+						<span> {this.props.currentValue} </span>
+						<input type="button" value="INCREMENT" onClick={() => this.props.increment()}/>
+					</div>
+				)
+			}
+		}*/}
+
+		{/*class Spinner extends React.Component{
+			render(){
+				let {currentValue, increment, decrement} = this.props;
+				return(
+					<div>
+						<input type="button" value="DECREMENT" onClick={() => decrement()}/>
+						<span> {currentValue} </span>
+						<input type="button" value="INCREMENT" onClick={() => increment()}/>
+					</div>
+				)
+			}
+		}*/}
+
+		{/*let Spinner = function(props){
+			let {currentValue, increment, decrement} = props;
+			return(
+				<div>
+					<input type="button" value="DECREMENT" onClick={() => decrement()}/>
+					<span> {currentValue} </span>
+					<input type="button" value="INCREMENT" onClick={() => increment()}/>
+				</div>
+			)
+		};*/}
+		
+
+		let Spinner = ({currentValue, increment, decrement}) => (
+			<div>
+				<input type="button" value="DECREMENT" onClick={() => decrement()}/>
+				<span> {currentValue} </span>
+				<input type="button" value="INCREMENT" onClick={() => increment()}/>
+			</div>
+		);
+		
+
+
+		function createSpinnerActions(){
+			let spinnerActionCreators = {
+				increment(){
+					return { type : 'INCREMENT' };
+				},
+				decrement(){
+					return { type : 'DECREMENT' }
+				}
+			};
+			return spinnerActionCreators;
+		}
+
+		function bindActionCreators(dispatch, actionCreators){
+			let result = {};
+			for(let key in actionCreators){
+				result[key] = function(){
+					let action = actionCreators[key]();
+					dispatch(action);
+				}
+			}
+			return result;
+		}
+
+		let spinnerActions = bindActionCreators(store.dispatch, createSpinnerActions());
+
+		function renderApp(){
+			let value = store.getState();
+			ReactDOM.render(
+				/*<Spinner 
+					currentValue={value} 
+					increment = {spinnerActions.increment}
+					decrement = {spinnerActions.decrement}
+				/>*/
+				<Spinner 
+					currentValue={value} 
+					{...spinnerActions}
+				/>
+				,
+				document.getElementById('root'));
+		}
+		store.subscribe(renderApp);
+		renderApp();
+	</script>
+</head>
+<body>
+	<div id="root"></div>
+</body>
+</html>

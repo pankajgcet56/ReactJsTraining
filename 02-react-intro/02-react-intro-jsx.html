@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React Intro</title>
+	<script src="react.development.js"></script>
+	<script src="react-dom.development.js"></script>
+	<script src="babel.min.js"></script>
+	<script type="text/babel">
+		class HelloWorld extends React.Component{
+			state = {
+				username : '[Dummy user]'
+			};
+			onRenderClick(){
+				let user = this.refs.txtUserName.value;
+				this.setState({username : user});
+			}
+			constructor(){
+				super();
+				this.onRenderClick = this.onRenderClick.bind(this);
+			}
+			render(){
+
+				return (
+					<div>
+						<label>User Name :</label>
+						<input type="text" ref="txtUserName" />
+						<input type="button" value="Render" onClick={this.onRenderClick} />
+						<h1>Hello {this.state.username}, Welcome to React.js</h1>
+						<hr />
+						<h3>Introduction</h3>
+						<div>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores cupiditate, deserunt, voluptas, voluptatibus repellat tempora inventore sint, recusandae tempore impedit velit! At ullam cupiditate, est, ab veritatis harum quam repellendus!</p>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, tempore a dolores maiores voluptatibus. Reprehenderit eos eligendi et ea dolorem quasi cum unde, accusamus necessitatibus in placeat. Rem, odit nobis.</p>
+						</div>
+					</div>)
+			}
+		}
+		
+		
+			
+		ReactDOM.render(<HelloWorld/>,
+				document.getElementById('root'));
+		
+	</script>
+</head>
+<body>
+	
+	<div id="root"></div>
+</body>
+</html>
